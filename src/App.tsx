@@ -3,9 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 import { KanbanComponent } from '@syncfusion/ej2-react-kanban';
 import { ColumnDirective, ColumnsDirective } from '@syncfusion/ej2-react-kanban/src';
+import { DataManager, ODataAdaptor } from '@syncfusion/ej2-data';
 
 
 class App extends React.Component {
+
+  public kanbanRemoteDatasource : DataManager = new DataManager({
+    url: 'https://ej2services.syncfusion.com/production/web-services/api/Kanban',
+    adaptor: new ODataAdaptor,
+    crossDomain: true
+  });
   public kanbanDatasource : Object[] = [
     {
       "Id": "Task 1",
@@ -61,15 +68,17 @@ class App extends React.Component {
 
   render(): React.ReactNode {
 
-    return(<KanbanComponent dataSource={this.kanbanDatasource} keyField = "Status" 
+    return(<KanbanComponent dataSource={this.kanbanRemoteDatasource} keyField = "Status" 
     cardSettings = {{contentField: "Summary", headerField: "Id"}} width = "100%" height = "100%" 
     swimlaneSettings={{keyField: "Assignee"}} enableTooltip={true}>
         
         <ColumnsDirective>
         <ColumnDirective headerText = 'To Do' keyField = "Open"></ColumnDirective>
         <ColumnDirective headerText = 'In Progress' keyField = "In Progress"></ColumnDirective>
-        <ColumnDirective headerText = 'Review' keyField = "Review"></ColumnDirective>
-        <ColumnDirective headerText = 'Testing' keyField = "Testing"></ColumnDirective>
+        <ColumnDirective headerText = 'Review' keyField = "Review"
+        minCount={1} maxCount={3}></ColumnDirective>
+        <ColumnDirective headerText = 'Testing' keyField = "Testing" 
+        minCount={5} maxCount={8}></ColumnDirective>
         <ColumnDirective headerText = 'Close' keyField = "Close"></ColumnDirective>
         </ColumnsDirective>
     </KanbanComponent>);
